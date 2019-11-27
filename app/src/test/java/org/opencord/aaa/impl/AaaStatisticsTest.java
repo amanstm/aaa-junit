@@ -300,6 +300,14 @@ private BasePacket fetchPacket(int index) {
         assertThat(stateMachine, notNullValue());
         assertThat(stateMachine.state(), is(StateMachine.STATE_AUTHORIZED));
 
+        // Supplicant trigger EAP Logoff
+        Ethernet loggoffPacket = constructSupplicantLogoffPacket();
+        sendPacket(loggoffPacket);
+
+        // State machine should be in logoff state
+        assertThat(stateMachine, notNullValue());
+        assertThat(stateMachine.state(), is(StateMachine.STATE_IDLE));
+
        // Counts the aaa Statistics count and displays in the log
        countAaaStatistics();
 
@@ -357,6 +365,7 @@ private BasePacket fetchPacket(int index) {
         // State machine should be in unauthorized state
         assertThat(stateMachine, notNullValue());
         assertThat(stateMachine.state(), is(StateMachine.STATE_UNAUTHORIZED));
+
         // Calculated the total round trip time
         aaaManager.aaaStatisticsManager.calculatePacketRoundtripTime();
         // Counts the aaa Statistics count and displays in the log
@@ -416,6 +425,13 @@ private BasePacket fetchPacket(int index) {
         assertThat(aaaStatisticsManager.getAaaStats().getRequestRttMilis(), notNullValue());
         assertThat(aaaStatisticsManager.getAaaStats().getUnknownServerRx(), notNullValue());
         assertThat(aaaStatisticsManager.getAaaStats().getUnknownTypeRx(), notNullValue());
+        assertThat(aaaStatisticsManager.getAaaStats().getEapolLogoffRx(), notNullValue());
+        assertThat(aaaStatisticsManager.getAaaStats().getEapolResIdentityMsgTrans(), notNullValue());
+        assertThat(aaaStatisticsManager.getAaaStats().getEapolAuthSuccessTrans(), notNullValue());
+        assertThat(aaaStatisticsManager.getAaaStats().getEapolAuthFailureTrans(), notNullValue());
+        assertThat(aaaStatisticsManager.getAaaStats().getEapolStartReqTrans(), notNullValue());
+        assertThat(aaaStatisticsManager.getAaaStats().getEapolResIdentityMsgTrans(), notNullValue());
+        assertThat(aaaStatisticsManager.getAaaStats().getEapolTransRespNotNak(), notNullValue());
     }
 
     /*
